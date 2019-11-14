@@ -5,6 +5,8 @@ const webpackConfig = require('../../webpack.dev.js');
 
 const socketio = require('socket.io');
 
+const Constants = require('../shared/constants');
+
 // Setup an Express server
 const app = express();
 app.use(express.static('public'));
@@ -28,9 +30,23 @@ const io = socketio(server);
 
 // Listen for socket.io connections
 io.on('connection', socket => {
-  console.log('Player connected!', socket.id);
+    console.log('Player connected!', socket.id);
 
-  //socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
-  //socket.on(Constants.MSG_TYPES.INPUT, handleInput);
-  //socket.on('disconnect', onDisconnect);
+    socket.on(Constants.MSG.GAME_JOIN, joinGame);
+    //socket.on(Constants.MPG.INPUT, handleInput);
+    
+    socket.on('disconnect', onDisconnect);
 });
+
+const Game = require('./game');
+
+// Setup the Game
+const game = new Game();
+
+function joinGame() {
+    game.addPlayer(this);
+}
+
+function onDisconnect() {
+    game.removePlayer(this);
+}
