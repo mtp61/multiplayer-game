@@ -33,7 +33,7 @@ function drawPlayers(me, others) {
     context.translate(me.x, me.y);
     context.rotate(me.direction);
     context.drawImage(
-        getAsset('img_ship.png'),
+        getAsset('img_ship_me.png'),
         -30/2, 
         -30/2, 
         30, 
@@ -42,6 +42,20 @@ function drawPlayers(me, others) {
     context.restore();
 
     // draw other ships
+    others.forEach(other => {
+        context.save();
+        context.translate(other.x, other.y);
+        context.rotate(other.direction);
+        context.drawImage(
+            getAsset('img_ship.png'),
+            -30/2, 
+            -30/2, 
+            30, 
+            30
+        )
+        context.restore();
+    })
+
 }
 
 var renderInterval = setInterval(render, 1000 / 60);

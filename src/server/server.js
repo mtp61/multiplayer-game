@@ -33,7 +33,7 @@ io.on('connection', socket => {
     console.log('Player connected!', socket.id);
 
     socket.on(Constants.MSG.GAME_JOIN, joinGame);
-    //socket.on(Constants.MPG.INPUT, handleInput);
+    socket.on(Constants.MSG.INPUT, handleInput);
     
     socket.on('disconnect', onDisconnect);
 });
@@ -42,6 +42,10 @@ const Game = require('./game');
 
 // Setup the Game
 const game = new Game();
+
+function handleInput(input) {
+    game.handleInput(this, input);
+}
 
 function joinGame() {
     game.addPlayer(this);

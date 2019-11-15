@@ -1,5 +1,5 @@
 // import other javascript
-import { connect, play } from './networking';
+import { connect, play, startInput } from './networking';
 import { downloadAssets } from './assets';
 import { initState } from './state';
 import { startRendering } from './render';
@@ -13,7 +13,11 @@ Promise.all([
 ])
 .then(() => {
     console.log('connected and all assets loaded');
+    
     play();
     initState();
+
+    startInput();
+
     startRendering();
 })

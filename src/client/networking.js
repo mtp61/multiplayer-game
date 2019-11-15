@@ -12,14 +12,28 @@ const connectedPromise = new Promise(resolve => {
     });
 });
 
-export const connect = onGameOver => ( // todo see if need onGameOver
+export const connect = (onGameOver) => (
     connectedPromise.then(() => {
         // Register callbacks
         socket.on(Constants.MSG.GAME_UPDATE, processGameUpdate);
         //socket.on(Constants.MSG_TYPES.GAME_OVER, onGameOver);
+    
     })
 );
 
 export const play = () => {
     socket.emit(Constants.MSG.GAME_JOIN, '');
 };
+
+function sendInput () {
+    socket.emit(Constants.MSG.INPUT, inputHandler.getInput());
+};
+
+export function startInput() {
+    inputHandler.startCapturingInput();
+
+    const InputHandler = require('./input');
+    const inputHandler = new InputHandler();
+
+    setInterval(sendInput, 10);
+}

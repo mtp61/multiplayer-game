@@ -2,7 +2,7 @@ const ObjectClass = require('./object');
 
 class Player extends ObjectClass {
     constructor(id, x, y) {
-        super(id, x, y, 0, 0);
+        super(id, x, y, 0, 0, 0);
     }
   
     update(dt) {

@@ -1,20 +1,26 @@
 class Object {
-    constructor(id, x, y, dir, vel) {
+    constructor(id, x, y, direction, v_x, v_y) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.direction = dir;
-        this.vel = vel;
+        this.direction = direction;
+        this.v_x = v_x;
+        this.v_y = v_y;
     }
   
     update(dt) {
-        this.x += dt * this.vel * Math.sin(this.direction);
-        this.y -= dt * this.vel * Math.cos(this.direction);
+        this.x += dt * this.v_x;
+        this.y += dt * this.v_y;
+    }
+
+    accelerate(accel) {
+        this.v_x += accel * Math.cos(this.direction);
+        this.v_y += accel * Math.sin(this.direction);
     }
   
-    /*setDirection(dir) {
-      this.direction = dir;
-    }*/
+    setDirection(dir) {
+        this.direction += dir;
+    }
   
     serializeForUpdate() {
         return {

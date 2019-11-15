@@ -1,0 +1,1 @@
+need to get rid of the class structure for input.js

@@ -5,11 +5,11 @@ const Constants = require('../shared/constants');
 class Game {
     constructor() {
         this.sockets = {};
-    this.players = {};
+        this.players = {};
 
-    this.lastUpdateTime = Date.now();
-    this.shouldSendUpdate = false;
-    setInterval(this.update.bind(this), 1000 / 60);
+        this.lastUpdateTime = Date.now();
+        this.shouldSendUpdate = false;
+        setInterval(this.update.bind(this), 1000 / 60);
     }
 
     addPlayer(socket) {
@@ -45,6 +45,13 @@ class Game {
             this.shouldSendUpdate = false;
         } else {
             this.shouldSendUpdate = true;
+        }
+    }
+
+    handleInput(socket, [direction, acceleration]) {
+        if (this.players[socket.id]) {
+            this.players[socket.id].setDirection(direction);
+            this.players[socket.id].accelerate(acceleration);
         }
     }
 
