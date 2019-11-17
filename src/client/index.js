@@ -1,23 +1,28 @@
 // import other javascript
-import { connect, play, startInput } from './networking';
+import { connect, play } from './networking';
 import { downloadAssets } from './assets';
 import { initState } from './state';
-import { startRendering } from './render';
+import { startRendering, stopRendering } from './render';
+import { startCapturingInput, stopCapturingInput } from './input';
 
 // import css
 import './css/main.css';
 
 Promise.all([
-    connect(),
+    connect(onGameOver),
     downloadAssets()
 ])
-.then(() => {
-    console.log('connected and all assets loaded');
-    
+.then(() => {   
     play();
     initState();
 
-    startInput();
+    startCapturingInput();
 
     startRendering();
 })
+
+function onGameOver() {
+    stopCapturingInput();
+
+    stopRendering();
+}

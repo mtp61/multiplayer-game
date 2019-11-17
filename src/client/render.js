@@ -64,3 +64,7 @@ export function startRendering() {
     clearInterval(renderInterval);
     renderInterval = setInterval(render, 1000 / 60);
 }
+
+export function stopRendering() {
+    clearInterval(renderInterval);
+}

@@ -16,7 +16,7 @@ export const connect = (onGameOver) => (
     connectedPromise.then(() => {
         // Register callbacks
         socket.on(Constants.MSG.GAME_UPDATE, processGameUpdate);
-        //socket.on(Constants.MSG_TYPES.GAME_OVER, onGameOver);
+        socket.on(Constants.MSG.GAME_OVER, onGameOver);
     
     })
 );
@@ -25,15 +25,6 @@ export const play = () => {
     socket.emit(Constants.MSG.GAME_JOIN, '');
 };
 
-function sendInput () {
-    socket.emit(Constants.MSG.INPUT, inputHandler.getInput());
+export function sendInput (input) {
+    socket.emit(Constants.MSG.INPUT, input);
 };
-
-export function startInput() {
-    inputHandler.startCapturingInput();
-
-    const InputHandler = require('./input');
-    const inputHandler = new InputHandler();
-
-    setInterval(sendInput, 10);
-}

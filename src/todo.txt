@@ -1,1 +1,3 @@
-need to get rid of the class structure for input.js
+figure out arrow format and convert to normal functions 
+
+figure out why only getting one input per frame
