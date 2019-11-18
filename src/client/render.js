@@ -70,10 +70,10 @@ function drawBullets(bullets) {
         context.rotate(bullet.direction);
         context.drawImage(
             getAsset('img_bullet.png'),
-            -20/2, 
-            -20/2, 
-            20, 
-            20
+            -60/2, 
+            -10/2, 
+            60, 
+            10
         );
         context.restore();
     });

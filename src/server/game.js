@@ -38,15 +38,23 @@ class Game {
         });
 
         // update bullets
-        for (let i = 0; i < this.bullets.length; i++) {
+        for (let i = 0; i < this.bullets.length; i++) { // loop thru bullets
             this.bullets[i].update(dt);
             if (this.bullets[i].x < Constants.MAP.MIN_X ||
                 this.bullets[i].x > Constants.MAP.MAX_X ||
                 this.bullets[i].y < Constants.MAP.MIN_Y ||
                 this.bullets[i].y > Constants.MAP.MAX_Y) { // check if in bounds
                 this.bullets.splice(i, 1);
+                continue;
             }
-        }       
+            
+            for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
+                if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.bullets[i])) {
+                    this.bullets.splice(i, 1);
+                    break;
+                }
+            }
+        } 
 
         // Send a game update to each player every other time
         if (this.shouldSendUpdate) {
@@ -62,7 +70,7 @@ class Game {
     }
 
     newBullet(player) {
-        this.bullets.push(new Bullet(player.id, player.x, player.y, player.direction));
+        this.bullets.push(new Bullet(player.id, player.x, player.y, player.direction, player.v_x, player.v_y));
     }
 
     handleInput(socket, input) {
@@ -71,7 +79,7 @@ class Game {
             this.players[socket.id].accelerate(input.throttle);
 
             if (input.gun && this.players[socket.id].canFire()) {
-                this.newBullet(this.players[socket.id].serializeForUpdate());
+                this.newBullet(this.players[socket.id].serializeForBullet());
                 this.players[socket.id].resetGunDelay();
             }
         }

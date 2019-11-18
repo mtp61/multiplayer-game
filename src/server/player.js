@@ -1,6 +1,5 @@
 const ObjectClass = require('./object');
 
-
 class Player extends ObjectClass {
     constructor(id, x, y) {
         super(id, x, y, 0, 0, 0);
@@ -26,6 +25,15 @@ class Player extends ObjectClass {
         }
     }
 
+    checkCollision(bullet) {
+        if (this.id != bullet.id && 
+            super.distanceTo(bullet) < 30/2 + 20/2) {
+            this.hp -= 10;
+            return true;
+        }
+        return false;
+    }
+
     resetGunDelay() {
         this.gunDelay = 10;
     }
@@ -35,6 +43,18 @@ class Player extends ObjectClass {
             id: this.id,
             x: this.x,
             y: this.y,
+            direction: this.direction,
+            hp: this.hp
+        };
+    }
+
+    serializeForBullet() { 
+        return {
+            id: this.id,
+            x: this.x,
+            y: this.y,
+            v_x: this.v_x,
+            v_y: this.v_y,
             direction: this.direction,
             hp: this.hp
         };

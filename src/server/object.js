@@ -17,7 +17,13 @@ class Object {
         this.v_x += accel * Math.cos(this.direction);
         this.v_y += accel * Math.sin(this.direction);
     }
-  
+
+    distanceTo(object) {
+        let dx = this.x - object.x;
+        let dy = this.y - object.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
     setDirection(dir) {
         this.direction += dir;
     }

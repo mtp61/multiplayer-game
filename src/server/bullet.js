@@ -1,10 +1,10 @@
 const ObjectClass = require('./object');
 
 class Bullet extends ObjectClass {
-    constructor(id, x, y, direction) {
-        super(id, x, y, direction, 0, 0);
+    constructor(id, x, y, direction, v_x, v_y) {
+        super(id, x, y, direction, v_x, v_y);
 
-        super.accelerate(500);
+        super.accelerate(1500);
     }
 
     update(dt) {
