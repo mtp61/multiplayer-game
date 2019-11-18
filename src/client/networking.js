@@ -17,7 +17,6 @@ export const connect = (onGameOver) => (
         // Register callbacks
         socket.on(Constants.MSG.GAME_UPDATE, processGameUpdate);
         socket.on(Constants.MSG.GAME_OVER, onGameOver);
-    
     })
 );
 

@@ -4,7 +4,8 @@ import { sendInput } from './networking';
 var movement = {
     left: 0,
     right: 0,
-    forward: 0
+    forward: 0,
+    gun: false
 }
 var networkInterval;
 
@@ -23,10 +24,11 @@ export function stopCapturingInput() {
 }
 
 function toNetwork() {
-    sendInput([
-        (movement.right - movement.left) * .05,
-        movement.forward * 3
-    ]);
+    sendInput({
+        rotation: (movement.right - movement.left) * .05,
+        throttle: movement.forward * 3,
+        gun: movement.gun
+    });
 }
 
 function onKeyDown(e) {
@@ -39,6 +41,9 @@ function onKeyDown(e) {
             break;
         case 68: // D
             movement.right = 1;
+            break;
+        case 32: // space
+            movement.gun = true;
             break;
     }
 }
@@ -53,6 +58,9 @@ function onKeyUp(e) {
             break;
         case 68: // D
             movement.right = 0;
+            break;
+        case 32: // space
+            movement.gun = false;
             break;
     }
 }

@@ -30,7 +30,7 @@ const io = socketio(server);
 
 // Listen for socket.io connections
 io.on('connection', socket => {
-    console.log('Player connected!', socket.id);
+    console.log('Player connected:', socket.id);
 
     socket.on(Constants.MSG.GAME_JOIN, joinGame);
     socket.on(Constants.MSG.INPUT, handleInput);
@@ -52,5 +52,7 @@ function joinGame() {
 }
 
 function onDisconnect() {
+    console.log('Player disconnected:', this.id);
+
     game.removePlayer(this);
 }

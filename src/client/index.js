@@ -12,7 +12,7 @@ Promise.all([
     connect(onGameOver),
     downloadAssets()
 ])
-.then(() => {   
+.then(() => {
     play();
     initState();
 

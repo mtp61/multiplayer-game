@@ -1,4 +1,5 @@
 const Player = require('./player');
+const Bullet = require('./bullet');
 
 const Constants = require('../shared/constants');
 
@@ -6,6 +7,7 @@ class Game {
     constructor() {
         this.sockets = {};
         this.players = {};
+        this.bullets = [];
 
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
@@ -35,6 +37,17 @@ class Game {
             player.update(dt);
         });
 
+        // update bullets
+        for (let i = 0; i < this.bullets.length; i++) {
+            this.bullets[i].update(dt);
+            if (this.bullets[i].x < Constants.MAP.MIN_X ||
+                this.bullets[i].x > Constants.MAP.MAX_X ||
+                this.bullets[i].y < Constants.MAP.MIN_Y ||
+                this.bullets[i].y > Constants.MAP.MAX_Y) { // check if in bounds
+                this.bullets.splice(i, 1);
+            }
+        }       
+
         // Send a game update to each player every other time
         if (this.shouldSendUpdate) {
             Object.keys(this.sockets).forEach(playerID => {
@@ -48,10 +61,19 @@ class Game {
         }
     }
 
-    handleInput(socket, [direction, acceleration]) {
+    newBullet(player) {
+        this.bullets.push(new Bullet(player.id, player.x, player.y, player.direction));
+    }
+
+    handleInput(socket, input) {
         if (this.players[socket.id]) {
-            this.players[socket.id].setDirection(direction);
-            this.players[socket.id].accelerate(acceleration);
+            this.players[socket.id].setDirection(input.rotation);
+            this.players[socket.id].accelerate(input.throttle);
+
+            if (input.gun && this.players[socket.id].canFire()) {
+                this.newBullet(this.players[socket.id].serializeForUpdate());
+                this.players[socket.id].resetGunDelay();
+            }
         }
     }
 
@@ -63,7 +85,8 @@ class Game {
         return {
             t: Date.now(),
             me: player.serializeForUpdate(),
-            others: otherPlayers.map(p => p.serializeForUpdate())
+            others: otherPlayers.map(p => p.serializeForUpdate()),
+            bullets: this.bullets.map(b => b.serializeForUpdate())
         };
     }
 }
