@@ -5,9 +5,9 @@ module.exports = Object.freeze({
         INPUT: 'input'
     },
     MAP: {
-        MIN_X: -100,
-        MAX_X: 2000,
-        MIN_Y: -100,
-        MAX_Y: 2000
+        MIN_X: -500,
+        MAX_X: 6000,
+        MIN_Y: -500,
+        MAX_Y: 6000
     }
 });
