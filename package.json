@@ -1,7 +1,7 @@
 {
   "name": "cs50-game",
   "version": "1.0.0",
-  "description": "",
+  "description": "<h1>Useful commands</h1> <h3>To setup</h3> <p>npm init</p> <p>npm install</p> <h3>To run the server</h3> <p>npm run develop</p>",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

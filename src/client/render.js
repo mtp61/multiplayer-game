@@ -9,6 +9,17 @@ const context = canvas.getContext('2d');
 
 context.font = "10px Arial"; // set font
 
+var img = new Image();
+
+img.src = 'assets/grid.png';
+
+var ptrn;
+
+img.onload = function(){
+    // create pattern
+    ptrn = context.createPattern(img, 'repeat'); // Create a pattern with this image, and set it to "repeat".
+}
+
 function render() {
     const game_state = getCurrentState();
 
@@ -19,54 +30,112 @@ function render() {
     }
 
     // Do the rendering
-    drawBackground();
+    drawBackground(game_state.me);
 
-    drawBullets(game_state.bullets);
+    drawBullets(game_state.bullets, game_state.me);
 
     drawPlayers(game_state.me, game_state.others);
+
+    drawMinimap(game_state.me, game_state.others);
 }
 
-function drawBackground() {
+function drawBackground(me) {
     context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = '#1f306b';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.translate(-me.x, -me.y);
+    context.fillStyle = ptrn;
+    context.fillRect(0, 0, 5000, 5000); 
+    context.restore();
+}
+
+function drawMinimap(me,others) {
+    context.clearRect(canvas.width-140, canvas.height-140, 110, 110);
+    context.beginPath();
+    context.rect(canvas.width-140, canvas.height-140, 110, 110);
+    context.stroke();
+
+    //draw me on map
+    context.drawImage(
+        getAsset('dot.png'),
+        canvas.width-130+me.x/50, 
+        canvas.height-130+me.y/50, 
+        10, 
+        10
+    );
+
+    //draw other ships on map
+    others.forEach(other => {
+        context.drawImage(
+            getAsset('red_dot.png'),
+            canvas.width-130+other.x/50, 
+            canvas.height-130+other.y/50, 
+            10, 
+            10
+        );
+    });
+
+    //draw healthbar
+    if (me.hp > 70)
+    {
+        context.fillStyle = '#238823';
+    }
+    else if (me.hp >30)
+    {
+        context.fillStyle = '#ffbf00'
+    }
+    else
+    {
+        context.fillStyle = '#d2222d';
+    }
+
+    context.clearRect(canvas.width-140, canvas.height-160, 110, 10);
+    context.beginPath();
+    context.rect(canvas.width-140, canvas.height-160, 110, 10);
+    context.stroke();
+
+    context.fillRect(canvas.width-140, canvas.height-160, Math.max(0,1.1*me.hp),10);
 }
 
 function drawPlayers(me, others) {
     // draw me
     context.save();
-    context.translate(me.x, me.y);
+    context.translate(canvas.width/2,canvas.height/2);
     context.rotate(me.direction);
     context.drawImage(
-        getAsset('img_ship_me.png'),
-        -30/2, 
-        -30/2, 
-        30, 
-        30
+        getAsset('ship7.png'),
+        -100/2,
+        -100/2,
+        100, 
+        100
     );
     context.restore();
-    context.fillText('HP: '.concat(me.hp), me.x - 20, me.y + 25);
+    context.fillStyle = 'black';
+    context.fillText('HP: '.concat(me.hp), canvas.width/2 - 20, canvas.height/2 + 25);
 
     // draw other ships
     others.forEach(other => {
         context.save();
-        context.translate(other.x, other.y);
+        context.translate(canvas.width/2-me.x+other.x, canvas.height/2-me.y+other.y);
         context.rotate(other.direction);
         context.drawImage(
-            getAsset('img_ship.png'),
-            -30/2, 
-            -30/2, 
-            30, 
-            30
+            getAsset('ship1.png'),
+            -100/2, 
+            -100/2, 
+            100, 
+            100
         );
         context.restore();
-        context.fillText('HP: '.concat(other.hp), other.x - 20, other.y + 25);
+        context.fillStyle = "black";
+        context.fillText('HP: '.concat(other.hp), canvas.width/2-me.x+other.x - 20, canvas.height/2-me.y+other.y + 25);
     });
-
 }
 
-function drawBullets(bullets) {
+function drawBullets(bullets, me) {
     bullets.forEach(bullet => {
         context.save();
-        context.translate(bullet.x, bullet.y);
+        context.translate(canvas.width/2-me.x+bullet.x, canvas.height/2-me.y+bullet.y);
         context.rotate(bullet.direction);
         context.drawImage(
             getAsset('img_bullet.png'),
