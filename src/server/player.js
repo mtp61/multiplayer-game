@@ -46,7 +46,8 @@ class Player extends ObjectClass {
             x: this.x,
             y: this.y,
             direction: this.direction,
-            hp: this.hp
+            hp: this.hp,
+            username: this.username
         };
     }
 

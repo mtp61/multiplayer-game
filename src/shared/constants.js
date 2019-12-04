@@ -9,5 +9,6 @@ module.exports = Object.freeze({
         MAX_X: 6000,
         MIN_Y: -500,
         MAX_Y: 6000
-    }
+    },
+    RENDER_DELAY: 100
 });

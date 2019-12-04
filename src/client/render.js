@@ -25,7 +25,7 @@ function render() {
 
     // check if game working
     if (game_state == null) { 
-        console.log('null gamestate'); // remove this later
+        console.log('null gamestate'); // log null gamestate to the console
         return; 
     }
 
@@ -81,7 +81,7 @@ function drawMinimap(me,others) {
     {
         context.fillStyle = '#238823';
     }
-    else if (me.hp >30)
+    else if (me.hp > 30)
     {
         context.fillStyle = '#ffbf00'
     }
@@ -99,21 +99,6 @@ function drawMinimap(me,others) {
 }
 
 function drawPlayers(me, others) {
-    // draw me
-    context.save();
-    context.translate(canvas.width/2,canvas.height/2);
-    context.rotate(me.direction);
-    context.drawImage(
-        getAsset('ship7.png'),
-        -100/2,
-        -100/2,
-        100, 
-        100
-    );
-    context.restore();
-    context.fillStyle = 'black';
-    context.fillText('HP: '.concat(me.hp), canvas.width/2 - 20, canvas.height/2 + 25);
-
     // draw other ships
     others.forEach(other => {
         context.save();
@@ -127,9 +112,60 @@ function drawPlayers(me, others) {
             100
         );
         context.restore();
-        context.fillStyle = "black";
-        context.fillText('HP: '.concat(other.hp), canvas.width/2-me.x+other.x - 20, canvas.height/2-me.y+other.y + 25);
+        // draw health bar
+        if (other.hp > 70) {
+            context.fillStyle = '#238823';
+        }
+        else if (other.hp > 30) {
+            context.fillStyle = '#ffbf00'
+        }
+        else {
+            context.fillStyle = '#d2222d';
+        }
+        context.clearRect(canvas.width/2-me.x+other.x - 27, canvas.height/2-me.y+other.y + 60, 55, 5);
+        context.beginPath();
+        context.rect(canvas.width/2-me.x+other.x - 27, canvas.height/2-me.y+other.y + 60, 55, 5);
+        context.stroke();
+        context.fillRect(canvas.width/2-me.x+other.x - 27, canvas.height/2-me.y+other.y + 60, Math.max(0,.55*other.hp),5);
+        // draw name
+        context.fillStyle = '#000000';
+        context.font = '12px sans-serif';
+        let textWidth = context.measureText(other.username).width;
+        context.fillText(other.username, canvas.width/2-me.x+other.x - textWidth / 2, canvas.height/2-me.y+other.y - 60);
     });
+    
+    // draw me
+    context.save();
+    context.translate(canvas.width/2,canvas.height/2);
+    context.rotate(me.direction);
+    context.drawImage(
+        getAsset('ship7.png'),
+        -100/2,
+        -100/2,
+        100, 
+        100
+    );
+    context.restore();
+    // draw my healthbar
+    if (me.hp > 70) {
+        context.fillStyle = '#238823';
+    }
+    else if (me.hp > 30) {
+        context.fillStyle = '#ffbf00'
+    }
+    else {
+        context.fillStyle = '#d2222d';
+    }
+    context.clearRect(canvas.width/2 - 27, canvas.height/2 + 60, 55, 5);
+    context.beginPath();
+    context.rect(canvas.width/2 - 27, canvas.height/2 + 60, 55, 5);
+    context.stroke();
+    context.fillRect(canvas.width/2 - 27, canvas.height/2 + 60, Math.max(0,.55*me.hp),5);
+    // draw name
+    context.fillStyle = '#000000';
+    context.font = '12px sans-serif';
+    let textWidth = context.measureText(me.username).width;
+    context.fillText(me.username, (canvas.width/2) - (textWidth / 2), canvas.height/2 - 60);
 }
 
 function drawBullets(bullets, me) {
