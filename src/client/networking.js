@@ -20,8 +20,8 @@ export const connect = (onGameOver) => (
     })
 );
 
-export const play = () => {
-    socket.emit(Constants.MSG.GAME_JOIN, '');
+export const play = username => {
+    socket.emit(Constants.MSG.GAME_JOIN, username);
 };
 
 export function sendInput (input) {

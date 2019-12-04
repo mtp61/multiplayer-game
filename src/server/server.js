@@ -34,7 +34,7 @@ io.on('connection', socket => {
 
     socket.on(Constants.MSG.GAME_JOIN, joinGame);
     socket.on(Constants.MSG.INPUT, handleInput);
-    
+
     socket.on('disconnect', onDisconnect);
 });
 
@@ -47,8 +47,8 @@ function handleInput(input) {
     game.handleInput(this, input);
 }
 
-function joinGame() {
-    game.addPlayer(this);
+function joinGame(username) {
+    game.addPlayer(this, username);
 }
 
 function onDisconnect() {
