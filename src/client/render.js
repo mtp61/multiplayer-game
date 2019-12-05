@@ -7,6 +7,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const context = canvas.getContext('2d');
 
+const Constants = require('../shared/constants');
+
 context.font = "10px Arial"; // set font
 
 var img = new Image();
@@ -46,7 +48,8 @@ function drawBackground(me) {
     context.save();
     context.translate(-me.x, -me.y);
     context.fillStyle = ptrn;
-    context.fillRect(0, 0, 5000, 5000); 
+    context.fillRect(canvas.width/2 + Constants.MAP.MIN_X, canvas.height/2 + Constants.MAP.MIN_Y, 
+        Constants.MAP.MAX_X - Constants.MAP.MIN_X, Constants.MAP.MAX_Y - Constants.MAP.MIN_Y); 
     context.restore();
 }
 
@@ -59,8 +62,8 @@ function drawMinimap(me,others) {
     //draw me on map
     context.drawImage(
         getAsset('dot.png'),
-        canvas.width-130+me.x/50, 
-        canvas.height-130+me.y/50, 
+        canvas.width-140+me.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100, 
+        canvas.height-140+me.y/(Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)*100,
         10, 
         10
     );

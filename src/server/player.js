@@ -1,5 +1,7 @@
 const ObjectClass = require('./object');
 
+const Constants = require('../shared/constants');
+
 class Player extends ObjectClass {
     constructor(id, username, x, y) {
         super(id, x, y, 0, 0, 0);
@@ -16,6 +18,26 @@ class Player extends ObjectClass {
 
         if (this.gunDelay > 0) {
             this.gunDelay--;
+        }
+
+        // apply deceleration
+        this.v_x *= Constants.DECELERATION;
+        this.v_y *= Constants.DECELERATION;
+        
+        // check if in bounds, adjust if needed
+        if (this.x < Constants.MAP.MIN_X) {
+            this.x = Constants.MAP.MIN_X;
+            this.v_x = 0;
+        } else if (this.x > Constants.MAP.MAX_X) {
+            this.x = Constants.MAP.MAX_X;
+            this.v_x = 0;
+        }
+        if (this.y < Constants.MAP.MIN_Y) {
+            this.y = Constants.MAP.MIN_Y;
+            this.v_y = 0;
+        } else if (this.y > Constants.MAP.MAX_Y) {
+            this.y = Constants.MAP.MAX_Y;
+            this.v_y = 0;
         }
     }
 

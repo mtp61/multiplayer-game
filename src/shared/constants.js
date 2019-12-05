@@ -5,10 +5,11 @@ module.exports = Object.freeze({
         INPUT: 'input'
     },
     MAP: {
-        MIN_X: -500,
-        MAX_X: 6000,
-        MIN_Y: -500,
-        MAX_Y: 6000
+        MIN_X: 0,
+        MAX_X: 5000,
+        MIN_Y: 0,
+        MAX_Y: 5000
     },
-    RENDER_DELAY: 100
+    RENDER_DELAY: 100,
+    DECELERATION: .99
 });
