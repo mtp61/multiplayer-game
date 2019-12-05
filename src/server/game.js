@@ -1,5 +1,6 @@
 const Player = require('./player');
 const Bullet = require('./bullet');
+const Healthpack = require('./healthpack');
 
 const Constants = require('../shared/constants');
 
@@ -8,7 +9,7 @@ class Game {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
-        
+        this.healthpacks = [];
         
 
         this.lastUpdateTime = Date.now();
@@ -38,6 +39,26 @@ class Game {
             const player = this.players[playerID];
             player.update(dt);
         });
+        
+        // update healthpacks
+        while (this.healthpacks.length < Constants.NUM_HEALTHPACKS) { // while need hps
+            // make healthpack
+            this.healthpacks.push(new Healthpack(
+                Math.floor(Math.random() * (Constants.MAP.MAX_X - Constants.MAP.MIN_X)) + Constants.MAP.MIN_X, // generate random locations
+                Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
+            ))
+        }
+        for (let i = 0; i < this.healthpacks.length; i++) { // loop thru healthpacks
+            for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
+                if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.healthpacks[i])) {
+                    if (this.players[Object.keys(this.sockets)[j]].hp + Constants.HEALTHPACK_HEALTH <= 100) {
+                        this.players[Object.keys(this.sockets)[j]].hp += Constants.HEALTHPACK_HEALTH;
+                        this.healthpacks.splice(i, 1); // destroy healthpack
+                        break;
+                    }
+                }
+            }
+        }
 
         // update bullets
         for (let i = 0; i < this.bullets.length; i++) { // loop thru bullets
@@ -121,7 +142,8 @@ class Game {
             me: player.serializeForUpdate(),
             others: otherPlayers.map(p => p.serializeForUpdate()),
             bullets: this.bullets.map(b => b.serializeForUpdate()),
-            leaderboard,
+            healthpacks: this.healthpacks.map(h => h.serializeForUpdate()),
+            leaderboard
         };
     }
 }

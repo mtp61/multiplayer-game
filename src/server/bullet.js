@@ -14,7 +14,6 @@ class Bullet extends ObjectClass {
     }
 
     serializeForUpdate() {
-        var obj_ser = super.serializeForUpdate(); 
         return {
             id: this.id,
             x: this.x,

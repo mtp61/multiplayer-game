@@ -15,5 +15,8 @@ module.exports = Object.freeze({
     DECELERATION: .99,
     KILL_SCORE: 100,
     PLAYER_RADIUS: 30,
-    BULLET_RADIUS: 20
+    BULLET_RADIUS: 20,
+    HEALTHPACK_RADIUS: 30,
+    NUM_HEALTHPACKS: 50,
+    HEALTHPACK_HEALTH: 10
 });

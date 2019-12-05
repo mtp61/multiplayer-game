@@ -34,6 +34,8 @@ function render() {
     // Do the rendering
     drawBackground(game_state.me);
 
+    drawHealthpacks(game_state.healthpacks, game_state.me);
+
     drawBullets(game_state.bullets, game_state.me);
 
     drawPlayers(game_state.me, game_state.others);
@@ -51,6 +53,21 @@ function drawBackground(me) {
     context.fillRect(canvas.width/2 + Constants.MAP.MIN_X, canvas.height/2 + Constants.MAP.MIN_Y, 
         Constants.MAP.MAX_X - Constants.MAP.MIN_X, Constants.MAP.MAX_Y - Constants.MAP.MIN_Y); 
     context.restore();
+}
+
+function drawHealthpacks(healthpacks, me) {
+    healthpacks.forEach(healthpack => {
+        context.save();
+        context.translate(canvas.width/2-me.x+healthpack.x, canvas.height/2-me.y+healthpack.y);
+        context.drawImage(
+            getAsset('red_dot.png'),
+            -Constants.HEALTHPACK_RADIUS, 
+            -Constants.HEALTHPACK_RADIUS, 
+            Constants.HEALTHPACK_RADIUS*2, 
+            Constants.HEALTHPACK_RADIUS*2
+        );
+        context.restore();
+    })
 }
 
 function drawMinimap(me,others) {
@@ -109,10 +126,10 @@ function drawPlayers(me, others) {
         context.rotate(other.direction);
         context.drawImage(
             getAsset('ship1.png'),
-            -100/2, 
-            -100/2, 
-            100, 
-            100
+            -Constants.PLAYER_RADIUS, 
+            -Constants.PLAYER_RADIUS, 
+            Constants.PLAYER_RADIUS*2, 
+            Constants.PLAYER_RADIUS*2
         );
         context.restore();
         // draw health bar
@@ -143,10 +160,10 @@ function drawPlayers(me, others) {
     context.rotate(me.direction);
     context.drawImage(
         getAsset('ship7.png'),
-        -100/2,
-        -100/2,
-        100, 
-        100
+        -Constants.PLAYER_RADIUS, 
+        -Constants.PLAYER_RADIUS, 
+        Constants.PLAYER_RADIUS*2, 
+        Constants.PLAYER_RADIUS*2
     );
     context.restore();
     // draw my healthbar
