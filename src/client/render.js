@@ -36,6 +36,8 @@ function render() {
 
     drawHealthpacks(game_state.healthpacks, game_state.me);
 
+    drawAsteroids(game_state.asteroids, game_state.me);
+
     drawBullets(game_state.bullets, game_state.me);
 
     drawPlayers(game_state.me, game_state.others);
@@ -60,11 +62,27 @@ function drawHealthpacks(healthpacks, me) {
         context.save();
         context.translate(canvas.width/2-me.x+healthpack.x, canvas.height/2-me.y+healthpack.y);
         context.drawImage(
-            getAsset('red_dot.png'),
+            getAsset('healthpack.png'),
             -Constants.HEALTHPACK_RADIUS, 
             -Constants.HEALTHPACK_RADIUS, 
             Constants.HEALTHPACK_RADIUS*2, 
             Constants.HEALTHPACK_RADIUS*2
+        );
+        context.restore();
+    })
+}
+
+function drawAsteroids(asteroids, me) {
+    asteroids.forEach(asteroid => {
+        context.save();
+        context.translate(canvas.width/2-me.x+asteroid.x, canvas.height/2-me.y+asteroid.y);
+        context.rotate(asteroid.direction);
+        context.drawImage(
+            getAsset('asteroid.png'),
+            -asteroid.radius, 
+            -asteroid.radius, 
+            asteroid.radius*2, 
+            asteroid.radius*2
         );
         context.restore();
     })
@@ -89,8 +107,8 @@ function drawMinimap(me,others) {
     others.forEach(other => {
         context.drawImage(
             getAsset('red_dot.png'),
-            canvas.width-130+other.x/50, 
-            canvas.height-130+other.y/50, 
+            canvas.width-140+other.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100, 
+            canvas.height-140+other.y/(Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)*100,
             10, 
             10
         );

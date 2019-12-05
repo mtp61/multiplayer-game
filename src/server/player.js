@@ -3,8 +3,12 @@ const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
-    constructor(id, username, x, y) {
-        super(id, x, y, 0, 0, 0, Constants.PLAYER_RADIUS);
+    constructor(x, y, id, username) {
+        super(id, 
+            x,
+            y,
+            0, 0, 0, 
+            Constants.PLAYER_RADIUS);
 
         this.hp = 100;
         this.gunDelay = 0;
@@ -54,7 +58,7 @@ class Player extends ObjectClass {
 
     checkCollision(object) {
         if (this.id != object.id &&
-            super.distanceTo(object) < this.radius/2 + object.radius/2) {
+            super.distanceTo(object) < .8 * (this.radius + object.radius)) { // don't collide unless overlapping
             return true;
         }
         return false;
