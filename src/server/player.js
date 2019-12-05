@@ -4,13 +4,16 @@ const Constants = require('../shared/constants');
 
 class Player extends ObjectClass {
     constructor(id, username, x, y) {
-        super(id, x, y, 0, 0, 0);
+        super(id, x, y, 0, 0, 0, Constants.PLAYER_RADIUS);
 
         this.hp = 100;
-
         this.gunDelay = 0;
-
         this.username = username;
+        this.score = 0;
+    }
+
+    add_score(to_add) {
+        this.score += to_add;
     }
 
     update(dt) {
@@ -49,10 +52,9 @@ class Player extends ObjectClass {
         }
     }
 
-    checkCollision(bullet) {
-        if (this.id != bullet.id &&
-            super.distanceTo(bullet) < 30/2 + 20/2) {
-            this.hp -= 10;
+    checkCollision(object) {
+        if (this.id != object.id &&
+            super.distanceTo(object) < this.radius/2 + object.radius/2) {
             return true;
         }
         return false;

@@ -8,6 +8,8 @@ class Game {
         this.sockets = {};
         this.players = {};
         this.bullets = [];
+        
+        
 
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
@@ -50,11 +52,27 @@ class Game {
 
             for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
                 if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.bullets[i])) {
-                    this.bullets.splice(i, 1);
+                    // update player hp
+                    this.players[Object.keys(this.sockets)[j]].hp -= 10;
+                    // update player score if kill
+                    if (this.players[Object.keys(this.sockets)[j]].hp <= 0) {
+                        this.players[this.bullets[i].id].add_score(Constants.KILL_SCORE);
+                    }
+                    this.bullets.splice(i, 1); // destroy bullet
                     break;
                 }
             }
         }
+        
+        // Check if any players are dead
+        Object.keys(this.sockets).forEach(playerID => {
+            const socket = this.sockets[playerID];
+            const player = this.players[playerID];
+            if (player.hp <= 0) {
+                socket.emit(Constants.MSG.GAME_OVER);
+                this.removePlayer(socket);
+            }
+        });
 
         // Send a game update to each player every other time
         if (this.shouldSendUpdate) {
@@ -88,9 +106,9 @@ class Game {
 
     getLeaderboard() {
       return Object.values(this.players)
-        .sort((p1, p2) => p2.hp - p1.hp)
+        .sort((p1, p2) => p2.score - p1.score)
         .slice(0, 5)
-        .map(p => ({ username: p.username, hp: Math.round(p.hp) }));
+        .map(p => ({ username: p.username, score: Math.round(p.score) }));
   }
 
     createUpdate(player, leaderboard) {

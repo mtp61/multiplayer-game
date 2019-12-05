@@ -1,11 +1,12 @@
 class Object {
-    constructor(id, x, y, direction, v_x, v_y) {
+    constructor(id, x, y, direction, v_x, v_y, radius) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.v_x = v_x;
         this.v_y = v_y;
+        this.radius = radius;
     }
   
     update(dt) {
