@@ -9,9 +9,12 @@ The game currently runs on localhost, on the port **3000**. To build it and run 
 
      - npm init
      - npm install
+     
+To run the game, then execute:
+
      - npm run develop
      
-Then open your browser and go to your localhost at  [http://127.0.0.1:3000/](http://127.0.0.1:3000/) or [http://localhost:3000](http://localhost:3000)
+Then open your browser and go to your localhost at  [http://127.0.0.1:3000/](http://127.0.0.1:3000/) or [http://localhost:3000](http://localhost:3000).
 ## Controls
 
 Enter your name, then hit **PLAY**. You will be spawned randomly in the map. Make yourself familiar with the game controls. Press **W** to move forward, **A** to rotate to the left and **D** to rotate to the right. To shoot laser beams, press the **spacebar**. 
