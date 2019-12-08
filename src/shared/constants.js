@@ -1,3 +1,5 @@
+// Declares and assigns values to the constants in the game
+
 module.exports = Object.freeze({
     MSG: {
         GAME_JOIN: 'game_join',
