@@ -8,6 +8,7 @@ const ASSET_NAMES = [
     'ship7.png',
     'healthpack.png',
     'asteroid.png',
+    'ammopack.png',
     '1.png',
     '2.png'
 

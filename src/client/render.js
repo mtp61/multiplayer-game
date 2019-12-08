@@ -36,6 +36,8 @@ function render() {
 
     drawHealthpacks(game_state.healthpacks, game_state.me);
 
+    drawAmmopacks(game_state.ammopacks, game_state.me);
+
     drawAsteroids(game_state.asteroids, game_state.me);
 
     drawBullets(game_state.bullets, game_state.me);
@@ -67,6 +69,21 @@ function drawHealthpacks(healthpacks, me) {
             -Constants.HEALTHPACK_RADIUS, 
             Constants.HEALTHPACK_RADIUS*2, 
             Constants.HEALTHPACK_RADIUS*2
+        );
+        context.restore();
+    })
+}
+
+function drawAmmopacks(ammopacks, me) {
+    ammopacks.forEach(ammopack => {
+        context.save();
+        context.translate(canvas.width/2-me.x+ammopack.x, canvas.height/2-me.y+ammopack.y);
+        context.drawImage(
+            getAsset('ammopack.png'),
+            -Constants.AMMOPACK_RADIUS, 
+            -Constants.AMMOPACK_RADIUS, 
+            Constants.AMMOPACK_RADIUS*2, 
+            Constants.AMMOPACK_RADIUS*2
         );
         context.restore();
     })
@@ -145,8 +162,33 @@ function drawMinimap(me,others) {
     context.beginPath();
     context.rect(canvas.width-140, canvas.height-160, 110, 10);
     context.stroke();
-
     context.fillRect(canvas.width-140, canvas.height-160, Math.max(0,1.1*me.hp),10);
+    context.fillStyle = "white";
+    context.font = "10px Sans-serif";
+    context.fillText("HP", canvas.width-140, canvas.height-151);
+
+    //draw ammobar
+    if (me.ammo > 15)
+    {
+        context.fillStyle = '#238823';
+    }
+    else if (me.ammo > 5)
+    {
+        context.fillStyle = '#ffbf00'
+    }
+    else
+    {
+        context.fillStyle = '#d2222d';
+    }
+
+    context.clearRect(canvas.width-140, canvas.height-180, 110, 10);
+    context.beginPath();
+    context.rect(canvas.width-140, canvas.height-180, 110, 10);
+    context.stroke();
+    context.fillRect(canvas.width-140, canvas.height-180, Math.max(0,5 * 1.1*me.ammo), 10);
+    context.fillStyle = "white";
+    context.font = "10px Sans-serif";
+    context.fillText("AMMO", canvas.width-140, canvas.height-171);
 }
 
 function drawPlayers(me, others) {
