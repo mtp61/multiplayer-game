@@ -1,3 +1,5 @@
+// Handles networking for the game
+
 import { processGameUpdate } from './state';
 
 import io from 'socket.io-client';
@@ -21,6 +23,7 @@ export const connect = () => (
     })
 );
 
+// Handles game over scenario
 function onGameOver() {
     console.log('game over');
     window.location.reload()

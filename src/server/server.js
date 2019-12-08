@@ -1,10 +1,15 @@
+// Handles server requests and responses
+
+// Imports express, webpack (and files associated with webpack)
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('../../webpack.dev.js');
 
+// Utilizes socket.io for multiplayer gameplay
 const socketio = require('socket.io');
 
+// Imports constants.js
 const Constants = require('../shared/constants');
 
 // Setup an Express server
@@ -38,6 +43,7 @@ io.on('connection', socket => {
     socket.on('disconnect', onDisconnect);
 });
 
+// Imports game.js
 const Game = require('./game');
 
 // Setup the Game

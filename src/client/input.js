@@ -9,13 +9,14 @@ var movement = {
 }
 var networkInterval;
 
+// Handles key inputs
 export function startCapturingInput() {
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
 
     networkInterval = setInterval(toNetwork, 1000 / 60);
 }
-    
+
 export function stopCapturingInput() {
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
@@ -23,6 +24,7 @@ export function stopCapturingInput() {
     clearInterval(networkInterval);
 }
 
+// Handles actual movement from user input
 function toNetwork() {
     sendInput({
         rotation: (movement.right - movement.left) * .05,
@@ -31,6 +33,7 @@ function toNetwork() {
     });
 }
 
+// Handles WASD input
 function onKeyDown(e) {
     switch (e.keyCode) {
         case 65: // A
@@ -48,6 +51,7 @@ function onKeyDown(e) {
     }
 }
 
+// Handles WASD input
 function onKeyUp(e) {
     switch (e.keyCode) {
         case 65: // A

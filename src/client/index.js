@@ -9,10 +9,12 @@ import { setLeaderboardHidden } from './leaderboard';
 // import css
 import './css/main.css';
 
+// Gets the html elements from index.html
 const playMenu = document.getElementById('play-menu');
 const playButton = document.getElementById('play-button');
 const usernameInput = document.getElementById('username-input');
 
+// Asynchronous function call to run game
 Promise.all([
     connect(),
     downloadAssets()
@@ -31,6 +33,7 @@ Promise.all([
 
 })
 
+// Handles end of game scenario
 function onGameOver() {
     stopCapturingInput();
     stopRendering();

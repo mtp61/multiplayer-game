@@ -1,12 +1,15 @@
+// Imports player.js, bullet.js, healthpack.js, ammopack.js, asteroid.js
 const Player = require('./player');
 const Bullet = require('./bullet');
 const Healthpack = require('./healthpack');
 const Ammopack = require('./ammopack');
 const Asteroid = require('./asteroid');
 
+// Imports constants.js
 const Constants = require('../shared/constants');
 
 class Game {
+    // Constructs initial game setup
     constructor() {
         this.sockets = {};
         this.players = {};
@@ -20,16 +23,19 @@ class Game {
         setInterval(this.update.bind(this), 1000 / 60);
     }
 
+    // Adds a Player to the Game
     addPlayer(socket, username) {
+        // Adds new socket to this Game's sockets dictionary
         this.sockets[socket.id] = socket;
-        
+
         // need to make sure it doesn't hit any asteroids
         let hits_asteroid, testX, testY;
             do {
                 hits_asteroid = false; // need to make player not hitting any asteroids
                 testX = Math.floor(Math.random() * (Constants.MAP.MAX_X - Constants.MAP.MIN_X)) + Constants.MAP.MIN_X // generate random locations
                 testY = Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
-                for (let j = 0; j < this.asteroids.length; j++) { // loop thru asteroids
+                // loop thru asteroid
+                for (let j = 0; j < this.asteroids.length; j++) { s
                     let asteroidX = this.asteroids[j].x;
                     let asteroidY = this.asteroids[j].y;
                     if (Math.sqrt(Math.pow(asteroidX - testX, 2) + Math.pow(asteroidY - testY, 2)) <
@@ -37,16 +43,18 @@ class Game {
                         hits_asteroid = true;
                         break;
                     }
-                } 
-            } 
+                }
+            }
             while (hits_asteroid)
 
+        // Adds new Plyaer to this Game's players dictionary
         this.players[socket.id] = new Player(
             testX,
             testY,
             socket.id, username);
     }
 
+    // Removes socket (and associated player) from the Game
     removePlayer(socket) {
         delete this.sockets[socket.id];
         delete this.players[socket.id];
@@ -63,7 +71,7 @@ class Game {
             const player = this.players[playerID];
             player.update(dt);
         });
-        
+
         // update healthpacks
         while (this.healthpacks.length < Constants.NUM_HEALTHPACKS) { // while need hps
             // make healthpack
@@ -72,8 +80,10 @@ class Game {
                 Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
             ))
         }
-        for (let i = 0; i < this.healthpacks.length; i++) { // loop thru healthpacks
-            for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
+        // loop thru healthpacks
+        for (let i = 0; i < this.healthpacks.length; i++) {
+            // loop thru players
+            for (let j = 0; j < Object.keys(this.sockets).length; j++) {
                 if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.healthpacks[i])) {
                     if (this.players[Object.keys(this.sockets)[j]].hp + Constants.HEALTHPACK_HEALTH <= 100) {
                         this.players[Object.keys(this.sockets)[j]].hp += Constants.HEALTHPACK_HEALTH;
@@ -83,7 +93,7 @@ class Game {
                 }
             }
         }
-        
+
         //update ammopacks
         while (this.ammopacks.length < Constants.NUM_AMMOPACKS) { // while need hps
             // make healthpack
@@ -92,8 +102,10 @@ class Game {
                 Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
             ))
         }
-        for (let i = 0; i < this.ammopacks.length; i++) { // loop thru healthpacks
-            for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
+        // loop thru ammopacks
+        for (let i = 0; i < this.ammopacks.length; i++) {
+            // loop thru players
+            for (let j = 0; j < Object.keys(this.sockets).length; j++) {
                 if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.ammopacks[i])) {
                     if (this.players[Object.keys(this.sockets)[j]].ammo + Constants.AMMOPACK_CONTENT <= Constants.MAX_AMMO) {
                         this.players[Object.keys(this.sockets)[j]].ammo += Constants.AMMOPACK_CONTENT;
@@ -179,7 +191,7 @@ class Game {
 
         // update asteroids
         let numBigAsteroids = 0;
-        for (let i = 0; i < this.asteroids.length; i++) { 
+        for (let i = 0; i < this.asteroids.length; i++) {
             if (this.asteroids[i].radius == Constants.BIG_ASTEROID_RADIUS) {
                 numBigAsteroids++;
             }
@@ -198,11 +210,11 @@ class Game {
                         hits_player = true;
                         break;
                     }
-                } 
-            } 
+                }
+            }
             while (hits_player)
-            
-            this.asteroids.push(new Asteroid(testX, 
+
+            this.asteroids.push(new Asteroid(testX,
                 testY,
                 Constants.BIG_ASTEROID_RADIUS,
                 Constants.BIG_ASTEROID_VELOCITY,
@@ -231,13 +243,13 @@ class Game {
                         case Constants.SMALL_ASTEROID_RADIUS:
                             this.players[Object.keys(this.sockets)[j]].hp -= Constants.SMALL_ASTEROID_DAMAGE;
                             break;
-                    }   
+                    }
                     this.asteroids.splice(i, 1); // destroy asteroid
                     break;
                 }
             }
         }
-        
+
         // Check if any players are dead
         Object.keys(this.sockets).forEach(playerID => {
             const socket = this.sockets[playerID];
@@ -266,6 +278,7 @@ class Game {
         this.bullets.push(new Bullet(player.id, player.x, player.y, player.direction, player.v_x, player.v_y));
     }
 
+    // Handles this Player's (from associated socket) input
     handleInput(socket, input) {
         if (this.players[socket.id]) {
             this.players[socket.id].setDirection(input.rotation);
@@ -278,6 +291,7 @@ class Game {
         }
     }
 
+    // Returns the current Game leaderboard
     getLeaderboard() {
       return Object.values(this.players)
         .sort((p1, p2) => p2.score - p1.score)
@@ -285,6 +299,7 @@ class Game {
         .map(p => ({ username: p.username, score: Math.round(p.score) }));
   }
 
+    // Returns update information for the Game
     createUpdate(player, leaderboard) {
         const otherPlayers = Object.values(this.players).filter(
             p => p !== player

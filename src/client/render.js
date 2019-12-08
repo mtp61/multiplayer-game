@@ -26,12 +26,12 @@ function render() {
     const game_state = getCurrentState();
 
     // check if game working
-    if (game_state == null) { 
+    if (game_state == null) {
         console.log('null gamestate'); // log null gamestate to the console
-        return; 
+        return;
     }
 
-    // Do the rendering
+    // Do the rendering and draw the various objects for gameplay
     drawBackground(game_state.me);
 
     drawHealthpacks(game_state.healthpacks, game_state.me);
@@ -47,6 +47,7 @@ function render() {
     drawMinimap(game_state.me, game_state.others);
 }
 
+// Draws game background
 function drawBackground(me) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = '#1f306b';
@@ -54,41 +55,43 @@ function drawBackground(me) {
     context.save();
     context.translate(-me.x, -me.y);
     context.fillStyle = ptrn;
-    context.fillRect(canvas.width/2 + Constants.MAP.MIN_X, canvas.height/2 + Constants.MAP.MIN_Y, 
-        Constants.MAP.MAX_X - Constants.MAP.MIN_X, Constants.MAP.MAX_Y - Constants.MAP.MIN_Y); 
+    context.fillRect(canvas.width/2 + Constants.MAP.MIN_X, canvas.height/2 + Constants.MAP.MIN_Y,
+        Constants.MAP.MAX_X - Constants.MAP.MIN_X, Constants.MAP.MAX_Y - Constants.MAP.MIN_Y);
     context.restore();
 }
-
+// Draws game health packs
 function drawHealthpacks(healthpacks, me) {
     healthpacks.forEach(healthpack => {
         context.save();
         context.translate(canvas.width/2-me.x+healthpack.x, canvas.height/2-me.y+healthpack.y);
         context.drawImage(
             getAsset('healthpack.png'),
-            -Constants.HEALTHPACK_RADIUS, 
-            -Constants.HEALTHPACK_RADIUS, 
-            Constants.HEALTHPACK_RADIUS*2, 
+            -Constants.HEALTHPACK_RADIUS,
+            -Constants.HEALTHPACK_RADIUS,
+            Constants.HEALTHPACK_RADIUS*2,
             Constants.HEALTHPACK_RADIUS*2
         );
         context.restore();
     })
 }
 
+// Draws game ammo packs
 function drawAmmopacks(ammopacks, me) {
     ammopacks.forEach(ammopack => {
         context.save();
         context.translate(canvas.width/2-me.x+ammopack.x, canvas.height/2-me.y+ammopack.y);
         context.drawImage(
             getAsset('ammopack.png'),
-            -Constants.AMMOPACK_RADIUS, 
-            -Constants.AMMOPACK_RADIUS, 
-            Constants.AMMOPACK_RADIUS*2, 
+            -Constants.AMMOPACK_RADIUS,
+            -Constants.AMMOPACK_RADIUS,
+            Constants.AMMOPACK_RADIUS*2,
             Constants.AMMOPACK_RADIUS*2
         );
         context.restore();
     })
 }
 
+// Draws game asteroids
 function drawAsteroids(asteroids, me) {
     asteroids.forEach(asteroid => {
         context.save();
@@ -98,9 +101,9 @@ function drawAsteroids(asteroids, me) {
         {
             context.drawImage(
                 getAsset('1.png'),
-                -asteroid.radius, 
-                -asteroid.radius, 
-                asteroid.radius*2, 
+                -asteroid.radius,
+                -asteroid.radius,
+                asteroid.radius*2,
                 asteroid.radius*2
             );
         }
@@ -108,9 +111,9 @@ function drawAsteroids(asteroids, me) {
         {
             context.drawImage(
                 getAsset('2.png'),
-                -asteroid.radius, 
-                -asteroid.radius, 
-                asteroid.radius*2, 
+                -asteroid.radius,
+                -asteroid.radius,
+                asteroid.radius*2,
                 asteroid.radius*2
             );
         }
@@ -118,6 +121,7 @@ function drawAsteroids(asteroids, me) {
     })
 }
 
+// Draws game mini map
 function drawMinimap(me,others) {
     context.clearRect(canvas.width-140, canvas.height-140, 110, 110);
     context.beginPath();
@@ -127,9 +131,9 @@ function drawMinimap(me,others) {
     //draw me on map
     context.drawImage(
         getAsset('dot.png'),
-        canvas.width-140+me.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100, 
+        canvas.width-140+me.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100,
         canvas.height-140+me.y/(Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)*100,
-        10, 
+        10,
         10
     );
 
@@ -137,9 +141,9 @@ function drawMinimap(me,others) {
     others.forEach(other => {
         context.drawImage(
             getAsset('red_dot.png'),
-            canvas.width-140+other.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100, 
+            canvas.width-140+other.x/(Constants.MAP.MAX_X - Constants.MAP.MIN_X)*100,
             canvas.height-140+other.y/(Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)*100,
-            10, 
+            10,
             10
         );
     });
@@ -191,6 +195,7 @@ function drawMinimap(me,others) {
     context.fillText("AMMO", canvas.width-140, canvas.height-171);
 }
 
+// Draws game players and their ships
 function drawPlayers(me, others) {
     // draw other ships
     others.forEach(other => {
@@ -199,9 +204,9 @@ function drawPlayers(me, others) {
         context.rotate(other.direction);
         context.drawImage(
             getAsset('ship1.png'),
-            -Constants.PLAYER_RADIUS, 
-            -Constants.PLAYER_RADIUS, 
-            Constants.PLAYER_RADIUS*2, 
+            -Constants.PLAYER_RADIUS,
+            -Constants.PLAYER_RADIUS,
+            Constants.PLAYER_RADIUS*2,
             Constants.PLAYER_RADIUS*2
         );
         context.restore();
@@ -226,16 +231,16 @@ function drawPlayers(me, others) {
         let textWidth = context.measureText(other.username).width;
         context.fillText(other.username, canvas.width/2-me.x+other.x - textWidth / 2, canvas.height/2-me.y+other.y - 60);
     });
-    
+
     // draw me
     context.save();
     context.translate(canvas.width/2,canvas.height/2);
     context.rotate(me.direction);
     context.drawImage(
         getAsset('ship7.png'),
-        -Constants.PLAYER_RADIUS, 
-        -Constants.PLAYER_RADIUS, 
-        Constants.PLAYER_RADIUS*2, 
+        -Constants.PLAYER_RADIUS,
+        -Constants.PLAYER_RADIUS,
+        Constants.PLAYER_RADIUS*2,
         Constants.PLAYER_RADIUS*2
     );
     context.restore();
@@ -261,6 +266,7 @@ function drawPlayers(me, others) {
     context.fillText(me.username, (canvas.width/2) - (textWidth / 2), canvas.height/2 - 60);
 }
 
+// Draws game bullets 
 function drawBullets(bullets, me) {
     bullets.forEach(bullet => {
         context.save();
@@ -268,9 +274,9 @@ function drawBullets(bullets, me) {
         context.rotate(bullet.direction);
         context.drawImage(
             getAsset('img_bullet.png'),
-            -60/2, 
-            -10/2, 
-            60, 
+            -60/2,
+            -10/2,
+            60,
             10
         );
         context.restore();

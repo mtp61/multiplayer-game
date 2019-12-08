@@ -1,13 +1,16 @@
+// Imports object.js
 const ObjectClass = require('./object');
 
+// Imports constants.js
 const Constants = require('../shared/constants');
 
+// Player is a subclass of Object
 class Player extends ObjectClass {
     constructor(x, y, id, username) {
-        super(id, 
+        super(id,
             x,
             y,
-            0, 0, 0, 
+            0, 0, 0,
             Constants.PLAYER_RADIUS);
 
         this.hp = 100;
@@ -17,10 +20,12 @@ class Player extends ObjectClass {
         this.score = 0;
     }
 
+    // Adds to_add to this Player's score
     add_score(to_add) {
         this.score += to_add;
     }
 
+    // Updates this Player's position
     update(dt) {
         super.update(dt);
 
@@ -31,7 +36,7 @@ class Player extends ObjectClass {
         // apply deceleration
         this.v_x *= Constants.DECELERATION;
         this.v_y *= Constants.DECELERATION;
-        
+
         // check if in bounds, adjust if needed
         if (this.x < Constants.MAP.MIN_X) {
             this.x = Constants.MAP.MIN_X;
@@ -49,6 +54,7 @@ class Player extends ObjectClass {
         }
     }
 
+    // Checks if this Player has the ability to fire
     canFire() {
         if (this.gunDelay == 0 && this.ammo > 0) {
             this.ammo -= 1;
@@ -58,9 +64,12 @@ class Player extends ObjectClass {
         }
     }
 
+
+    // Checks if this Player has collided with another Object
     checkCollision(object) {
+        // don't collide unless overlapping
         if (this.id != object.id &&
-            super.distanceTo(object) < .8 * (this.radius + object.radius)) { // don't collide unless overlapping
+            super.distanceTo(object) < .8 * (this.radius + object.radius)) {
             return true;
         }
         return false;

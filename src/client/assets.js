@@ -1,3 +1,5 @@
+// Gets and downloads assets for the game
+
 const ASSET_NAMES = [
     'img_ship.png',
     'img_ship_me.png',
@@ -13,9 +15,9 @@ const ASSET_NAMES = [
     '2.png'
 
 ];
-  
+
 const assets = {};
-  
+
 const downloadPromise = Promise.all(ASSET_NAMES.map(downloadAsset));
 
 function downloadAsset(assetName) {
@@ -29,7 +31,7 @@ function downloadAsset(assetName) {
         asset.src = `/assets/${assetName}`;
     });
 }
-  
+
 export const downloadAssets = () => downloadPromise;
 
 export const getAsset = assetName => assets[assetName];
