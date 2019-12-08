@@ -11,6 +11,7 @@ class Player extends ObjectClass {
             Constants.PLAYER_RADIUS);
 
         this.hp = 100;
+        this.ammo = Constants.MAX_AMMO;
         this.gunDelay = 0;
         this.username = username;
         this.score = 0;
@@ -49,7 +50,8 @@ class Player extends ObjectClass {
     }
 
     canFire() {
-        if (this.gunDelay == 0) {
+        if (this.gunDelay == 0 && this.ammo > 0) {
+            this.ammo -= 1;
             return true;
         } else {
             return false;
@@ -75,6 +77,7 @@ class Player extends ObjectClass {
             y: this.y,
             direction: this.direction,
             hp: this.hp,
+            ammo: this.ammo,
             username: this.username
         };
     }
@@ -87,7 +90,8 @@ class Player extends ObjectClass {
             v_x: this.v_x,
             v_y: this.v_y,
             direction: this.direction,
-            hp: this.hp
+            hp: this.hp,
+            ammo: this.ammo
         };
     }
 }

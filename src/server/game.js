@@ -1,6 +1,7 @@
 const Player = require('./player');
 const Bullet = require('./bullet');
 const Healthpack = require('./healthpack');
+const Ammopack = require('./ammopack');
 const Asteroid = require('./asteroid');
 
 const Constants = require('../shared/constants');
@@ -12,6 +13,7 @@ class Game {
         this.bullets = [];
         this.healthpacks = [];
         this.asteroids = [];
+        this.ammopacks = [];
 
         this.lastUpdateTime = Date.now();
         this.shouldSendUpdate = false;
@@ -76,6 +78,26 @@ class Game {
                     if (this.players[Object.keys(this.sockets)[j]].hp + Constants.HEALTHPACK_HEALTH <= 100) {
                         this.players[Object.keys(this.sockets)[j]].hp += Constants.HEALTHPACK_HEALTH;
                         this.healthpacks.splice(i, 1); // destroy healthpack
+                        break;
+                    }
+                }
+            }
+        }
+        
+        //update ammopacks
+        while (this.ammopacks.length < Constants.NUM_AMMOPACKS) { // while need hps
+            // make healthpack
+            this.ammopacks.push(new Ammopack(
+                Math.floor(Math.random() * (Constants.MAP.MAX_X - Constants.MAP.MIN_X)) + Constants.MAP.MIN_X, // generate random locations
+                Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
+            ))
+        }
+        for (let i = 0; i < this.ammopacks.length; i++) { // loop thru healthpacks
+            for (let j = 0; j < Object.keys(this.sockets).length; j++) { // loop thru players
+                if (this.players[Object.keys(this.sockets)[j]].checkCollision(this.ammopacks[i])) {
+                    if (this.players[Object.keys(this.sockets)[j]].ammo + Constants.AMMOPACK_CONTENT <= Constants.MAX_AMMO) {
+                        this.players[Object.keys(this.sockets)[j]].ammo += Constants.AMMOPACK_CONTENT;
+                        this.ammopacks.splice(i, 1); // destroy healthpack
                         break;
                     }
                 }
@@ -274,6 +296,7 @@ class Game {
             others: otherPlayers.map(p => p.serializeForUpdate()),
             bullets: this.bullets.map(b => b.serializeForUpdate()),
             healthpacks: this.healthpacks.map(h => h.serializeForUpdate()),
+            ammopacks: this.ammopacks.map(h => h.serializeForUpdate()),
             asteroids: this.asteroids.map(a => a.serializeForUpdate()),
             leaderboard
         };
