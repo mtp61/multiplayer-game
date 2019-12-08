@@ -5,7 +5,10 @@ By Matt Pauly, Thomas Maisonneuve and Kabir Nagral
 Our CS50 Final project is an online real time multiplayer game called **Multiplayer asteroids**. Each player controls a spaceship in a 2D environment. The goal is to survive the longest and maximize one's score, which can be done in two different ways: by shooting at the other players connected to the server at the same time, or by destroying the dangerous asteroids floating around the map.
 
 ## How to setup
-The game currently runs on localhost, on the port **3000**. To build it and run it, download the source files and execute the following commands in a terminal:
+The game can currently run on localhost, on the port **3000**, or on the **CS50 IDE**. 
+
+### Localhost setup
+To build the game and run it locally, download the source files and execute the following commands in a terminal:
 
      - npm init
      - npm install
@@ -17,6 +20,9 @@ To run the game, then execute:
 Then open your browser and go to your localhost at  [http://127.0.0.1:3000/](http://127.0.0.1:3000/) or [http://localhost:3000](http://localhost:3000).
 
 To test multiplayer funtionality, either open a new tab or connect another computer to the same network and type in the address bar the IP of the computer hosting the server (ex. 10.250.63.223:3000, as found in Network preferences).
+
+### CS50 IDE setup
+To host the game on CS50 IDE, upload the zipped source files to the IDE and unzip them. Open a terminal and type in the same commands you would execute if you were to serve it on localhost (see above). Finally click on CS50 IDE (upper left corner of the page) > Web Server. Chrome might block the scripts for safety reasons, so just click on the "shield" icon in the address bar and "allow unsafe scripts" for the game to work. Copy the URL and send it to who you want to play with.
 
 ## Controls
 
