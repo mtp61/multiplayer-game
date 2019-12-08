@@ -3,7 +3,7 @@ const ObjectClass = require('./object');
 const Constants = require('../shared/constants');
 
 class Asteroid extends ObjectClass {
-    constructor(x, y, radius, velocity, direction, hp) {
+    constructor(x, y, radius, velocity, direction, hp, type) {
         super('asteroid', 
         x,
         y,
@@ -12,6 +12,8 @@ class Asteroid extends ObjectClass {
         radius);
 
         this.hp = hp;
+
+        this.type = Math.random();
 
         super.accelerate(velocity);
     }
@@ -26,7 +28,8 @@ class Asteroid extends ObjectClass {
             x: this.x,
             y: this.y,
             direction: this.direction,
-            radius: this.radius
+            radius: this.radius,
+            type: this.type
         };
     }
 }

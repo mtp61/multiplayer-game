@@ -7,7 +7,10 @@ const ASSET_NAMES = [
     'ship1.png',
     'ship7.png',
     'healthpack.png',
-    'asteroid.png'
+    'asteroid.png',
+    '1.png',
+    '2.png'
+
 ];
   
 const assets = {};

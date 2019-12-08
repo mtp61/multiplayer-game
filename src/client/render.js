@@ -77,13 +77,26 @@ function drawAsteroids(asteroids, me) {
         context.save();
         context.translate(canvas.width/2-me.x+asteroid.x, canvas.height/2-me.y+asteroid.y);
         context.rotate(asteroid.direction);
-        context.drawImage(
-            getAsset('asteroid.png'),
-            -asteroid.radius, 
-            -asteroid.radius, 
-            asteroid.radius*2, 
-            asteroid.radius*2
-        );
+        if (asteroid.type >= 0.5)
+        {
+            context.drawImage(
+                getAsset('1.png'),
+                -asteroid.radius, 
+                -asteroid.radius, 
+                asteroid.radius*2, 
+                asteroid.radius*2
+            );
+        }
+        else
+        {
+            context.drawImage(
+                getAsset('2.png'),
+                -asteroid.radius, 
+                -asteroid.radius, 
+                asteroid.radius*2, 
+                asteroid.radius*2
+            );
+        }
         context.restore();
     })
 }
