@@ -35,7 +35,7 @@ class Game {
                 testX = Math.floor(Math.random() * (Constants.MAP.MAX_X - Constants.MAP.MIN_X)) + Constants.MAP.MIN_X // generate random locations
                 testY = Math.floor(Math.random() * (Constants.MAP.MAX_Y - Constants.MAP.MIN_Y)) + Constants.MAP.MIN_Y
                 // loop thru asteroid
-                for (let j = 0; j < this.asteroids.length; j++) { s
+                for (let j = 0; j < this.asteroids.length; j++) { 
                     let asteroidX = this.asteroids[j].x;
                     let asteroidY = this.asteroids[j].y;
                     if (Math.sqrt(Math.pow(asteroidX - testX, 2) + Math.pow(asteroidY - testY, 2)) <
