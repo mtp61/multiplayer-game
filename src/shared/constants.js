@@ -14,7 +14,7 @@ module.exports = Object.freeze({
         MAX_Y: 5000
     },
     RENDER_DELAY: 100,
-    DECELERATION: .99,
+    DECELERATION: .995,
     KILL_SCORE: 500,
     PLAYER_RADIUS: 50,
     BULLET_RADIUS: 20,
